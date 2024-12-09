@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesión</title>
+    <link rel="stylesheet" href="styles/indexstyles.css">
+
+    <script>
+        let intentos = 0;
+
+        function validarLogin() {
+            let correoIngresado = document.getElementById("correo").value;
+            let contraseñaIngresada = document.getElementById("contraseña").value;
+            let correoRegistrado = localStorage.getItem("correo");
+            let contraseñaRegistrada = localStorage.getItem("contraseña");
+            if (correoIngresado === correoRegistrado && contraseñaIngresada === contraseñaRegistrada) {
+                alert("¡Ingreso exitoso!");
+            } else {
+                intentos++;
+                if (intentos >= 3) {
+                    alert("Se ha bloqueado el acceso después de 3 intentos fallidos.");
+                    document.getElementById("loginForm").reset();
+                    document.getElementById("loginForm").disabled = true;
+                } else {
+                    alert("Correo o contraseña incorrectos. Intento " + intentos + " de 3.");
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="login-container">
+        <h1>Inicio de sesión</h1>
+    
+        <form id="loginForm" action="javascript:void(0);" onsubmit="validarLogin()">
+            <label for="correo">Correo:</label><br>
+            <input type="email" id="correo" required><br><br>
+
+            <label for="contraseña">Contraseña:</label><br>
+            <input type="password" id="contraseña" required><br><br>
+
+            <button type="submit">Iniciar sesión</button><br><br>
+
+            <a href="recuperarContraseña.html"><button type="button">Olvidaste tu contraseña</button></a>
+        </form>
+    </div>
+
+</body>
+</html>

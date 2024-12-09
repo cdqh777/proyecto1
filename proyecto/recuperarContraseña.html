@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar contraseña</title>
+    <link rel="stylesheet" href="styles/recuperarContra.css">
+    <script>
+        function validarCorreo() {
+            let correo = document.getElementById("correo").value;
+
+            let correoValido = /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(correo);
+            if (!correoValido) {
+                alert("Por favor, ingresa un correo válido de Gmail.");
+                return false;
+            }
+
+            let correoRegistrado = localStorage.getItem("correo");
+            if (correo !== correoRegistrado) {
+                alert("El correo ingresado no está registrado.");
+                return false;
+            }
+            document.getElementById("cambiarContraseñaForm").style.display = "block";
+            return false;
+        }
+        function validarPassword() {
+            let password = document.getElementById("password").value;
+            let error = "";
+
+            if (password.length < 8) {
+                error = "La contraseña debe tener al menos 8 caracteres.";
+            } else if (!/(?=.*[a-z])/.test(password) || !/(?=.*[A-Z])/.test(password) || !/(?=.*[0-9])/.test(password) || !/(?=.*[!@#$%^&*(),.?":{}|<>])/g.test(password)) {
+                error = "La contraseña debe tener al menos una mayúscula, una minúscula, un número y un carácter especial.";
+            }
+            if (error) {
+                document.getElementById("errorPassword").innerText = error;
+                document.getElementById("confirmarCambioBtn").disabled = true;
+                return false;
+            }
+            document.getElementById("errorPassword").innerText = "";
+            document.getElementById("confirmarCambioBtn").disabled = false;
+            return true;
+        }
+        function confirmarCambio() {
+            let nuevaContraseña = document.getElementById("password").value;
+            localStorage.setItem("contraseña", nuevaContraseña);
+            alert("¡Contraseña cambiada exitosamente!");
+            window.location.href = "index.html";
+        }
+    </script>
+</head>
+
+<body>
+
+    <h1>Recuperar contraseña</h1>
+    <form id="verificarCorreoForm" action="javascript:void(0);" onsubmit="return validarCorreo()">
+        <label for="correo">Correo:</label><br>
+        <input type="email" id="correo" required><br><br>
+        <button type="submit">Verificar Correo</button>
+    </form>
+
+    <form id="cambiarContraseñaForm" style="display:none;" action="javascript:void(0);" oninput="validarPassword()">
+        <label for="password">Nueva Contraseña:</label><br>
+        <input type="password" id="password" required><br><br>
+        <span id="errorPassword" style="color:red;"></span><br><br>
+        <button type="button" id="confirmarCambioBtn" disabled onclick="confirmarCambio()">Confirmar Cambio de
+            Contraseña</button><br><br>
+    </form>
+
+</body>
+
+</html>
